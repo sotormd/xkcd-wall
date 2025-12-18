@@ -8,7 +8,7 @@ wallpapers with a solid background.
 It supports fetching the latest comic, a specific comic by number, or a random
 comic.
 
-The tool is configured via JSON file and is packaged with
+The tool is configured via JSON and packaged with
 [Nix](https://nixos.org/download).
 
 # Usage
