@@ -62,8 +62,6 @@ func main() {
 		}
 	}
 
-	fmt.Println(configFile)
-
 	var config Config
 
 	data, err := os.ReadFile(configFile)
@@ -77,15 +75,11 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(config)
-
 	path, err := xkcd.Get(*comicType, config.Cache)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not fetch comic: %v\n", err)
 		os.Exit(1)
 	}
-
-	fmt.Println(path)
 
 	bg := config.BackgroundColors[rand.Intn(len(config.BackgroundColors))]
 	fg := config.ForegroundColors[rand.Intn(len(config.ForegroundColors))]
@@ -96,23 +90,17 @@ func main() {
 		os.Exit(1)
 	}
 
-	fmt.Println(colored)
-
 	background, err := xkcd.MakeBackground(config.Dimensions, bg, config.Cache)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not create background: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println(background)
-
 	final, err := xkcd.CompositeCenter(colored, background, config.Cache)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not create final image: %v\n", err)
 		os.Exit(1)
 	}
-
-	fmt.Println(final)
 
 	if err := xkcd.CopyFile(final, config.Target); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not copy image to target: %v\n", err)
