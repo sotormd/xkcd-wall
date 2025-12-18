@@ -143,9 +143,9 @@
               '';
             in
             {
-              systemd.services.xkcd-wall = {
+              systemd.user.services.xkcd-wall = {
                 description = "Fetch XKCD comic and generate wallpaper";
-                wantedBy = [ "multi-user.target" ];
+                wantedBy = [ "default.target" ];
                 serviceConfig = {
                   Type = "oneshot";
                   ExecStart = "${xkcd-wall-package}/bin/xkcd-wall";
@@ -153,7 +153,7 @@
                 };
               };
 
-              systemd.timers.xkcd-wall = {
+              systemd.user.timers.xkcd-wall = {
                 description = "Run xkcd-wall periodically";
                 wantedBy = [ "timers.target" ];
                 timerConfig = lib.mkIf (cfg.interval != "") {

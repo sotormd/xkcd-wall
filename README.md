@@ -27,14 +27,6 @@ github:sotormd/xkcd-wall
 
 # Usage
 
-```bash
-nix run github:sotormd/xkcd-wall -- -t <today|random|<number>> -c </path/to/config.json> [/path/to/output.png]
-```
-
-<details>
-
-<summary>Click to expand: examples</summary>
-
 1. Get today's comic
 
    ```bash
@@ -53,8 +45,6 @@ nix run github:sotormd/xkcd-wall -- -t <today|random|<number>> -c </path/to/conf
    nix run github:sotormd/xkcd-wall -- -t 1341 ./output.png
    ```
 
-</details>
-
 # Configuration
 
 The tool looks for configuration in `$HOME/.config/xkcd-wall/config.json`.
@@ -62,6 +52,10 @@ The tool looks for configuration in `$HOME/.config/xkcd-wall/config.json`.
 If this does not exist, a default configuration file is created.
 
 A configuration file path can also be passed using the `-c` flag.
+
+```bash
+nix run github:sotormd/xkcd-wall -- -t today -c /tmp/config.json ./output.png
+```
 
 <details>
 
