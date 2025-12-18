@@ -1,0 +1,7 @@
+{
+    "background-colors": [ "#2e3440" ],
+    "foreground-colors": [ "#81a1c1" ],
+    "dimensions": "1920x1080",
+    "target": "/tmp/xkcd.png",
+    "cache": "/tmp/xkcd-wall-cache"
+}
