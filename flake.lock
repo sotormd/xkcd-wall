@@ -18,7 +18,23 @@
     },
     "root": {
       "inputs": {
-        "nixpkgs": "nixpkgs"
+        "nixpkgs": "nixpkgs",
+        "wallpapers": "wallpapers"
+      }
+    },
+    "wallpapers": {
+      "locked": {
+        "lastModified": 1766046455,
+        "narHash": "sha256-qh0qy7NmWh4z2myD+E+1LCETV+2yWF4W6RaNDv5Sals=",
+        "owner": "sotormd",
+        "repo": "wallpapers",
+        "rev": "0f353537e9f2ca32150f34885015151c30ffdf47",
+        "type": "github"
+      },
+      "original": {
+        "owner": "sotormd",
+        "repo": "wallpapers",
+        "type": "github"
       }
     }
   },

@@ -18,7 +18,6 @@ type Config struct {
 	BackgroundColors []string `json:"background-colors"`
 	ForegroundColors []string `json:"foreground-colors"`
 	Dimensions       string   `json:"dimensions"`
-	Target           string   `json:"target"`
 	Cache            string   `json:"cache"`
 }
 
@@ -38,6 +37,13 @@ func main() {
 	comicType := flag.String("t", defaultComicType, "today, random, or <number>")
 
 	flag.Parse()
+
+	args := flag.Args()
+
+	if len(args) < 1 {
+		fmt.Fprintln(os.Stderr, "Error: expected output path")
+		os.Exit(1)
+	}
 
 	configFile := *configPath
 
@@ -102,10 +108,10 @@ func main() {
 		os.Exit(1)
 	}
 
-	if err := xkcd.CopyFile(final, config.Target); err != nil {
+	if err := xkcd.CopyFile(final, args[0]); err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not copy image to target: %v\n", err)
 		os.Exit(1)
 	}
 
-	fmt.Println(config.Target)
+	fmt.Println(args[0])
 }
