@@ -13,18 +13,6 @@ The tool is configured via JSON and packaged with
 
 A NixOS module is also included, which sets up a systemd timer.
 
-```bash
-github:sotormd/xkcd-wall
-├───apps
-│   └───x86_64-linux
-│       └───default: app
-├───nixosModules
-│   └───xkcd: NixOS module
-└───packages
-    └───x86_64-linux
-        └───default: package 'xkcd-wall-0.1.0'
-```
-
 # Usage
 
 1. Get today's comic
