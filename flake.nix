@@ -3,7 +3,6 @@
 
   inputs = {
     nixpkgs.url = "github:nixos/nixpkgs/nixpkgs-unstable";
-    wallpapers.url = "github:sotormd/wallpapers";
   };
 
   outputs =
@@ -112,7 +111,7 @@
 
               fallback = lib.mkOption {
                 type = lib.types.path;
-                default = inputs.wallpapers.lib.wallpapers.nord.nixos;
+                default = ./default.png;
                 description = "Fallback image";
               };
             };
