@@ -1,6 +1,6 @@
 # xkcd-wall
 
-Get [xkcd](https://xkcd.com) on YOUR wallpaper today.
+Get [xkcd](https://xkcd.com) on your wallpaper today.
 
 `xkcd-wall` is a simple tool to fetch xkcd comics, recolor them, and generate
 wallpapers with a solid background.
