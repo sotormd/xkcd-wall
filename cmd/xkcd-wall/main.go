@@ -18,17 +18,16 @@ type Config struct {
 	BackgroundColors []string `json:"background-colors"`
 	ForegroundColors []string `json:"foreground-colors"`
 	Dimensions       string   `json:"dimensions"`
-	Cache            string   `json:"cache"`
 }
 
 func main() {
-	home, err := os.UserHomeDir()
+	home, err := os.UserConfigDir()
 	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: could not determine home directory: %v\n", err)
+		fmt.Fprintf(os.Stderr, "Error: could not determine config directory: %v\n", err)
 		os.Exit(1)
 	}
 
-	defaultConfigPath := filepath.Join(home, ".config", "xkcd-wall", "config.json")
+	defaultConfigPath := filepath.Join(home, "xkcd-wall", "config.json")
 
 	configPath := flag.String("c", defaultConfigPath, "Path to config.json")
 
@@ -81,7 +80,13 @@ func main() {
 		os.Exit(1)
 	}
 
-	path, err := xkcd.Get(*comicType, config.Cache)
+	cacheDir, err := os.UserCacheDir()
+	if err != nil {
+		fmt.Fprintf(os.Stderr, "Error: could not get cache dir: %v\n", err)
+		os.Exit(1)
+	}
+
+	path, err := xkcd.Get(*comicType, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not fetch comic: %v\n", err)
 		os.Exit(1)
@@ -90,19 +95,19 @@ func main() {
 	bg := config.BackgroundColors[rand.Intn(len(config.BackgroundColors))]
 	fg := config.ForegroundColors[rand.Intn(len(config.ForegroundColors))]
 
-	colored, err := xkcd.Colorize(path, bg, fg, config.Cache)
+	colored, err := xkcd.Colorize(path, bg, fg, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not colorize comic: %v\n", err)
 		os.Exit(1)
 	}
 
-	background, err := xkcd.MakeBackground(config.Dimensions, bg, config.Cache)
+	background, err := xkcd.MakeBackground(config.Dimensions, bg, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not create background: %v\n", err)
 		os.Exit(1)
 	}
 
-	final, err := xkcd.CompositeCenter(colored, background, config.Cache)
+	final, err := xkcd.CompositeCenter(colored, background, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not create final image: %v\n", err)
 		os.Exit(1)

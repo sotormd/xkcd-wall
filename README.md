@@ -1,6 +1,6 @@
 # xkcd-wall
 
-Get [xkcd](https://xkcd.com) on your wallpaper today.
+Create wallpapers from [xkcd](https://xkcd.com) comics.
 
 `xkcd-wall` is a simple tool to fetch xkcd comics, recolor them, and generate
 wallpapers with a solid background.
@@ -10,8 +10,6 @@ comic.
 
 The tool is configured via JSON and packaged with
 [Nix](https://nixos.org/download).
-
-A NixOS module is also included, which sets up a systemd timer.
 
 # Usage
 
@@ -35,7 +33,7 @@ A NixOS module is also included, which sets up a systemd timer.
 
 # Configuration
 
-The tool looks for configuration in `$HOME/.config/xkcd-wall/config.json`.
+The tool looks for configuration in `$XDG_CONFIG_HOME/xkcd-wall/config.json`.
 
 If this does not exist, a default configuration file is created.
 
@@ -53,8 +51,7 @@ nix run github:sotormd/xkcd-wall -- -t today -c /tmp/config.json ./output.png
 {
   "background-colors": ["#2e3440"],
   "foreground-colors": ["#d8dee9"],
-  "dimensions": "1920x1080",
-  "cache": "/tmp/xkcd-wall-cache"
+  "dimensions": "1920x1080"
 }
 ```
 
@@ -67,4 +64,3 @@ The configuration values are explained here:
 | `background-colors` | list of background colors to randomly choose from | `["#2e3440", "#3b4252"]`                                  |
 | `foreground-colors` | list of foreground colors to randomly choose from | `["#bf616a", "#d08770", "#ebcb8b", "#a3be8c", "#b48ead"]` |
 | `dimensions`        | output image dimensions                           | `"1920x1200"`                                             |
-| `cache`             | cache directory                                   | `"/home/username/.cache"`                                 |
