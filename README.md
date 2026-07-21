@@ -5,62 +5,50 @@ Create wallpapers from [xkcd](https://xkcd.com) comics.
 `xkcd-wall` is a simple tool to fetch xkcd comics, recolor them, and generate
 wallpapers with a solid background.
 
-It supports fetching the latest comic, a specific comic by number, or a random
-comic.
-
-The tool is configured via JSON and packaged with
-[Nix](https://nixos.org/download).
+`xkcd-wall` is packaged with [Nix](https://nixos.org/download) for
+`x86_64-linux` and `aarch64-linux`.
 
 # Usage
 
-1. Get today's comic
+```bash
+nix run github:sotormd/xkcd-wall -- ./output.png
+```
 
-   ```bash
-   nix run github:sotormd/xkcd-wall -- -t today ./output.png
-   ```
-
-2. Get a random comic
-
-   ```bash
-   nix run github:sotormd/xkcd-wall -- -t random ./output.png
-   ```
-
-3. Get a specific comic
-
-   ```bash
-   nix run github:sotormd/xkcd-wall -- -t 1341 ./output.png
-   ```
-
-# Configuration
-
-The tool looks for configuration in `$XDG_CONFIG_HOME/xkcd-wall/config.json`.
-
-If this does not exist, a default configuration file is created.
-
-A configuration file path can also be passed using the `-c` flag.
+# Options
 
 ```bash
-nix run github:sotormd/xkcd-wall -- -t today -c /tmp/config.json ./output.png
+nix run github:sotormd/xkcd-wall -- [options] <output>
 ```
 
-<details>
+The following command-line arguments are supported:
 
-<summary>Click to expand: default configuration values</summary>
+| option | description                                          | default     |
+| ------ | ---------------------------------------------------- | ----------- |
+| `-t`   | comic to fetch: `today`, `random`, or a comic number | `today`     |
+| `-d`   | output image dimensions                              | `1920x1080` |
+| `-b`   | background color in hex format                       | `2e3440`    |
+| `-f`   | foreground color in hex format                       | `d8dee9`    |
 
-```json
-{
-  "background-colors": ["#2e3440"],
-  "foreground-colors": ["#d8dee9"],
-  "dimensions": "1920x1080"
-}
+Examples:
+
+1. Get a random comic, `2000x2000`, white background and black foreground
+
+```bash
+nix run github:sotormd/xkcd-wall -- \
+  -t random \
+  -d 2000x2000 \
+  -b ffffff \
+  -f 000000 \
+  ./output.png
 ```
 
-</details>
+2. Get comic #1341, `1920x1200`, `2e3440` background and `ebcb8b` background
 
-The configuration values are explained here:
-
-| value               | explanation                                       | example                                                   |
-| ------------------- | ------------------------------------------------- | --------------------------------------------------------- |
-| `background-colors` | list of background colors to randomly choose from | `["#2e3440", "#3b4252"]`                                  |
-| `foreground-colors` | list of foreground colors to randomly choose from | `["#bf616a", "#d08770", "#ebcb8b", "#a3be8c", "#b48ead"]` |
-| `dimensions`        | output image dimensions                           | `"1920x1200"`                                             |
+```bash
+nix run github:sotormd/xkcd-wall -- \
+  -t 1341 \
+  -d 1920x1200 \
+  -b 2e3440 \
+  -f ebcb8b \
+  ./output.png
+```

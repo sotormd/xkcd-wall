@@ -6,17 +6,25 @@
   };
 
   outputs =
-    { nixpkgs, ... }:
+    inputs:
     let
-      pkgs = nixpkgs.legacyPackages.x86_64-linux;
+      systems = [
+        "x86_64-linux"
+        "aarch64-linux"
+      ];
+
+      forAllSystems =
+        apply: inputs.nixpkgs.lib.genAttrs systems (system: apply inputs.nixpkgs.legacyPackages.${system});
     in
     {
-      packages.x86_64-linux.default = pkgs.buildGoModule {
-        pname = "xkcd-wall";
-        version = "0.1.0";
-        src = ./.;
-        subPackages = [ "./cmd/xkcd-wall" ];
-        vendorHash = null;
-      };
+      packages = forAllSystems (pkgs: {
+        default = pkgs.buildGoModule {
+          pname = "xkcd-wall";
+          version = "0";
+          src = ./.;
+          subPackages = [ "./cmd/xkcd-wall" ];
+          vendorHash = null;
+        };
+      });
     };
 }

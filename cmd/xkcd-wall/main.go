@@ -2,38 +2,24 @@ package main
 
 import (
 	_ "embed"
-	"encoding/json"
 	"flag"
 	"fmt"
-	"math/rand"
 	"os"
-	"path/filepath"
 	"xkcd-wall/xkcd"
 )
 
-//go:embed assets/default.json
-var embeddedDefaultConfig []byte
-
-type Config struct {
-	BackgroundColors []string `json:"background-colors"`
-	ForegroundColors []string `json:"foreground-colors"`
-	Dimensions       string   `json:"dimensions"`
-}
-
 func main() {
-	home, err := os.UserConfigDir()
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: could not determine config directory: %v\n", err)
-		os.Exit(1)
-	}
-
-	defaultConfigPath := filepath.Join(home, "xkcd-wall", "config.json")
-
-	configPath := flag.String("c", defaultConfigPath, "Path to config.json")
-
 	defaultComicType := "today"
+	comicTypeArg := flag.String("t", defaultComicType, "today, random, or <number>")
 
-	comicType := flag.String("t", defaultComicType, "today, random, or <number>")
+	defaultDimensions := "1920x1200"
+	dimensionsArg := flag.String("d", defaultDimensions, "dimensions, eg. 1920x1080")
+
+	defaultBackground := "2e3440"
+	backgroundArg := flag.String("b", defaultBackground, "background, eg. ffffff")
+
+	defaultForeground := "d8dee9"
+	foregroundArg := flag.String("f", defaultForeground, "foreground, eg. 000000")
 
 	flag.Parse()
 
@@ -44,56 +30,22 @@ func main() {
 		os.Exit(1)
 	}
 
-	configFile := *configPath
-
-	if _, err := os.Stat(configFile); err != nil {
-		if os.IsNotExist(err) {
-
-			configDir := filepath.Dir(configFile)
-
-			if err := os.MkdirAll(configDir, 0o755); err != nil {
-				fmt.Fprintf(os.Stderr, "Error: could not create config directory: %v\n", err)
-				os.Exit(1)
-			}
-
-			if err := os.WriteFile(configFile, embeddedDefaultConfig, 0o644); err != nil {
-				fmt.Fprintf(os.Stderr, "Error: could not write default config: %v\n", err)
-				os.Exit(1)
-			}
-
-		} else {
-			fmt.Fprintf(os.Stderr, "Error: could not read config file: %v\n", err)
-			os.Exit(1)
-		}
-	}
-
-	var config Config
-
-	data, err := os.ReadFile(configFile)
-	if err != nil {
-		fmt.Fprintf(os.Stderr, "Error: could not read config file: %v\n", err)
-		os.Exit(1)
-	}
-
-	if err := json.Unmarshal(data, &config); err != nil {
-		fmt.Fprintf(os.Stderr, "Error: could not read configuration json: %v\n", err)
-		os.Exit(1)
-	}
-
 	cacheDir, err := os.UserCacheDir()
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not get cache dir: %v\n", err)
 		os.Exit(1)
 	}
 
-	path, err := xkcd.Get(*comicType, cacheDir)
+	comicType := *comicTypeArg
+	dimensions := *dimensionsArg
+	bg := *backgroundArg
+	fg := *foregroundArg
+
+	path, err := xkcd.Get(comicType, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not fetch comic: %v\n", err)
 		os.Exit(1)
 	}
-
-	bg := config.BackgroundColors[rand.Intn(len(config.BackgroundColors))]
-	fg := config.ForegroundColors[rand.Intn(len(config.ForegroundColors))]
 
 	colored, err := xkcd.Colorize(path, bg, fg, cacheDir)
 	if err != nil {
@@ -101,7 +53,7 @@ func main() {
 		os.Exit(1)
 	}
 
-	background, err := xkcd.MakeBackground(config.Dimensions, bg, cacheDir)
+	background, err := xkcd.MakeBackground(dimensions, bg, cacheDir)
 	if err != nil {
 		fmt.Fprintf(os.Stderr, "Error: could not create background: %v\n", err)
 		os.Exit(1)
