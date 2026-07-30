@@ -18,13 +18,7 @@
     in
     {
       packages = forAllSystems (pkgs: {
-        default = pkgs.buildGoModule {
-          pname = "xkcd-wall";
-          version = "0";
-          src = ./.;
-          subPackages = [ "./cmd/xkcd-wall" ];
-          vendorHash = null;
-        };
+        default = import ./default.nix { inherit pkgs; };
       });
     };
 }
